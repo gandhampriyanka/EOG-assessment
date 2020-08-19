@@ -40,11 +40,6 @@ const slice = createSlice({
   initialState,
   reducers: {
     metricsDataRecevied: (state, action: PayloadAction<Metrics>) => {
-      console.log(action.payload);
-      // console.log(action.payload.getMultipleMeasurements.measurements);
-      // const getMultipleMeasurements: any[] = action.payload.getMultipleMeasurements;
-      // console.log(getMultipleMeasurements);
-
       state.getMultipleMeasurements = action.payload.getMultipleMeasurements;
     },
     metricsApiErrorReceived: (state, action: PayloadAction<ApiErrorAction>) => state,

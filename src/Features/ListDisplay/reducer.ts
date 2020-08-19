@@ -17,7 +17,7 @@ const slice = createSlice({
   initialState,
   reducers: {
     equipmentsListDataRecevied: (state, action: PayloadAction<ListDisplay>) => {
-      const getMetrics = action.payload;
+      // const getMetrics = action.payload;
       state.getMetrics = action.payload;
     },
     equipmentsApiErrorReceived: (state, action: PayloadAction<ApiErrorAction>) => state,

@@ -2,16 +2,16 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from './reducer';
-import { Provider, createClient, useQuery } from 'urql';
-import { useGeolocation } from 'react-use';
+import { useQuery } from 'urql';
+// import { useGeolocation } from 'react-use';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import Chip from '../../components/Chip';
+// import Chip from '../../components/Chip';
 import { IState } from '../../store';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-const client = createClient({
-  url: 'https://react.eogresources.com/graphql',
-});
+// const client = createClient({
+//   url: 'https://react.eogresources.com/graphql',
+// });
 
 const query = `
 query($input: [MeasurementQuery]!) {
@@ -46,13 +46,11 @@ const chartdata = (data: any) => {
   if (data.length > 0) {
     let temp = [];
     let dlen = data[0].measurements.length;
-    // console.log(data[0].measurements.length);
     for (let i = 0; i < dlen; i++) {
       let obj: myobj = {};
       for (let j = 0; j < data.length; j++) {
         // not all equip has same measurement length so
         if (data[j].measurements[i]) {
-          // console.log('lol', data[j].measurements[i]);
           obj[data[j].measurements[i].metric] = data[j].measurements[i].value;
           obj['at'] = new Date(data[j].measurements[i].at).toLocaleTimeString().replace(/:\d+ /, ' ');
         }
@@ -67,16 +65,14 @@ const chartdata = (data: any) => {
 
 //////
 const getMetrics = (state: IState) => {
-  console.log(state);
   const getMultipleMeasurements = state.metrics.getMultipleMeasurements;
-  console.log(getMultipleMeasurements);
   return {
     getMultipleMeasurements,
   };
 };
 
-export const DisplayChart: React.FC<any> = (sel: selcVal) => {
-  let vall: string;
+const DisplayChart: React.FC<any> = (sel: selcVal) => {
+  // let vall: string;
   const dispatch = useDispatch();
   const getMultipleMeasurements = useSelector(getMetrics);
   let graphList = chartdata(getMultipleMeasurements.getMultipleMeasurements);
@@ -95,7 +91,9 @@ export const DisplayChart: React.FC<any> = (sel: selcVal) => {
     return <Line type="monotone" key={metrics} stroke={colorsObj[metrics]} dataKey={metrics} activeDot={{ r: 2 }} />;
   });
 
-  let valuesSelected: myobj = sel;
+  //
+
+  // let valuesSelected: myobj = sel;
   let current_time = new Date().getTime();
   let input: myobj[] = [];
   if (sel.selectedValue) {
@@ -113,6 +111,7 @@ export const DisplayChart: React.FC<any> = (sel: selcVal) => {
     variables: {
       input,
     },
+    pollInterval: 3000,
   });
   const { fetching, data, error } = result;
   useEffect(() => {
@@ -127,8 +126,8 @@ export const DisplayChart: React.FC<any> = (sel: selcVal) => {
   if (fetching) return <LinearProgress />;
 
   return (
-    <div>
-      <Provider value={client}>
+    <div style={{ width: '100%', height: '100%' }}>
+      <ResponsiveContainer>
         <LineChart
           width={500}
           height={400}
@@ -146,7 +145,9 @@ export const DisplayChart: React.FC<any> = (sel: selcVal) => {
           <Tooltip />
           {area}
         </LineChart>
-      </Provider>
+      </ResponsiveContainer>
     </div>
   );
 };
+
+export default DisplayChart;

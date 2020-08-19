@@ -2,15 +2,24 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from './reducer';
 import { Provider, createClient, useQuery } from 'urql';
+// import LinearProgress from '@material-ui/core/LinearProgress';
+import DisplayChart from '../DisplayChart/DisplayChart';
+import IdivItem from '../IdivItem/IdivItem';
 import { IState } from '../../store';
 import Select from 'react-select';
-import { DisplayChart } from '../DisplayChart/DisplayChart';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
 
+// import Grid from '@material-ui/core/Grid'
+// import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+// import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+import Box from '@material-ui/core/Box';
+// import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
+// import { ValueType, ActionMeta } from 'react-select';
+// import { ValueType } from 'react-select';
 const client = createClient({
   url: 'https://react.eogresources.com/graphql',
 });
@@ -20,12 +29,18 @@ query {
   getMetrics
 }
 `;
-
+// interface Label {
+//   label: {};
+//   name: string;
+//   selectedValue?: string;
+// }
 interface optInt {
   value: string;
   label: string;
 }
-
+// export interface TrueFalseListWrapper {
+//   itemList: { text: string; value: string }[];
+// }
 interface IMyObject {
   label: number;
   value: number;
@@ -33,13 +48,41 @@ interface IMyObject {
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
+    marginTop: theme.spacing(2),
+  },
+  container: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(12, 1fr)',
+    gridGap: theme.spacing(3),
+  },
+  dropdown: {
+    minWidth: '400px',
+    display: 'inline-flex',
+    margin: '0 auto',
+    flexDirection: 'column',
   },
   paper: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(0),
     textAlign: 'center',
     color: theme.palette.text.secondary,
+    marginBottom: theme.spacing(2),
+  },
+  flexcolumn: {
+    flexDirection: 'column',
+    display: 'flex',
+  },
+  spacing: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    minHeight: '340px',
+    color: theme.palette.text.secondary,
+    marginBottom: theme.spacing(2),
+    flex: '1',
   },
 }));
+// interface Itate {
+//   selectedValue: IMyObject[];
+// }
 
 interface Itate {
   selectedValue: IMyObject[];
@@ -61,11 +104,11 @@ const getListDisplay = (state: IState) => {
 export default () => {
   return (
     <Provider value={client}>
-      <Listt />
+      <List />
     </Provider>
   );
 };
-const Listt: React.FC = () => {
+const List: React.FC = () => {
   const classes = useStyles();
   let [selectedValue, onSelected] = useState<simpleInt[]>([]);
 
@@ -74,14 +117,14 @@ const Listt: React.FC = () => {
   const opt: lType = listData.getMetrics;
   const optArr: string[] = opt.getMetrics;
   let optionsList: optInt[] = [];
-  // let listt: optInt[] = [];
+
   if (optArr) {
     optArr.forEach((item: any) => {
       optionsList.push({ label: item, value: item });
     });
   }
 
-  let itemss;
+  // let itemss;
 
   let ss;
 
@@ -100,11 +143,10 @@ const Listt: React.FC = () => {
 
   type simpleType = simpleInt[];
 
-  // type OnChange = (value: ValueType<MyOptionType>, actionMeta: ActionMeta<MyOptionType>) => void;
   const selectt = (val?: any) => {
     if (val) {
       let valuee: simpleInt[] = val;
-      let arrayselc: simpleType = [];
+      // let arrayselc: simpleType = [];
       onSelected(valuee);
     } else {
       onSelected([]);
@@ -116,10 +158,8 @@ const Listt: React.FC = () => {
 
   const [result] = useQuery({
     query,
-    // pollInterval: 3000,
-    // requestPolicy: 'network-only',
   });
-  const { fetching, data, error } = result;
+  const { data, error } = result;
   useEffect(() => {
     if (error) {
       dispatch(actions.equipmentsApiErrorReceived({ error: error.message }));
@@ -134,24 +174,36 @@ const Listt: React.FC = () => {
     <div className={classes.root}>
       <CssBaseline />
       <Container fixed>
-        <Grid container spacing={3}>
-          <Grid item justify="center" alignItems="center" xs={12}>
-            <Paper className={classes.paper}>
-              <Grid item xs={5}>
-                {listofEquipments}
-              </Grid>
-            </Paper>
+        <Grid container justify="center" spacing={3}>
+          <Grid item xs={12}>
+            <Box textAlign="center">
+              <Paper className={classes.dropdown}>{listofEquipments}</Paper>
+            </Box>
           </Grid>
+          {selectedValue.length > 0 ? (
+            <Grid item xs={3}>
+              {selectedValue.map((item, index) => {
+                return (
+                  <Grid item key={index} xs={12}>
+                    <Paper className={classes.paper}>
+                      <IdivItem selectedValue={item.value}></IdivItem>
+                    </Paper>
+                  </Grid>
+                );
+              })}
+            </Grid>
+          ) : null}
+          {selectedValue.length > 0 ? (
+            <Grid item xs={9} className={classes.flexcolumn}>
+              <Paper className={classes.spacing}>
+                <DisplayChart selectedValue={selectedValue}></DisplayChart>
+              </Paper>
+            </Grid>
+          ) : null}
         </Grid>
-
-        {selectedValue.length > 0 ? (
-          <Grid item xs={8}>
-            <Paper className={classes.paper}>
-              <DisplayChart selectedValue={selectedValue}></DisplayChart>
-            </Paper>
-          </Grid>
-        ) : null}
       </Container>
     </div>
   );
 };
+
+// export default List;
