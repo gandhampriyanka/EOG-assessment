@@ -8,6 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from './Avatar';
+import Listt from '../Features/ListDisplay/ListDisplay';
 
 const useStyles = makeStyles({
   card: {
@@ -19,6 +20,7 @@ export default () => {
   const classes = useStyles();
   return (
     <Card className={classes.card}>
+      <Listt></Listt>
       <CardHeader title="OK, Priyanka Gandham, you're all setup. Now What?" />
       <CardContent>
         <List>
