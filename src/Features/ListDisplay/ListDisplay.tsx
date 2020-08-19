@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actions } from './reducer';
 import { Provider, createClient, useQuery } from 'urql';
 // import LinearProgress from '@material-ui/core/LinearProgress';
-import DisplayChart from '../DisplayChart/DisplayChart';
+import { DisplayChart } from '../DisplayChart/DisplayChart';
 import IdivItem from '../IdivItem/IdivItem';
 import { IState } from '../../store';
 import Select from 'react-select';
@@ -121,16 +121,6 @@ const List: React.FC = () => {
   if (optArr) {
     optArr.forEach((item: any) => {
       optionsList.push({ label: item, value: item });
-    });
-  }
-
-  // let itemss;
-
-  let ss;
-
-  if (selectedValue) {
-    ss = selectedValue.map((item: myobj) => {
-      return item.value;
     });
   }
 

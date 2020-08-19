@@ -1,25 +1,10 @@
-// import * as React from 'react';
-// interface Label {
-//   label: {};
-//   name: string;
-//   selectedValue?: string;
-// }
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { actions } from './reducer';
-import { createClient, useQuery } from 'urql';
-// import { useGeolocation } from 'react-use';
+import { useQuery } from 'urql';
 import LinearProgress from '@material-ui/core/LinearProgress';
-// import Chip from '../../components/Chip';
 import { IState } from '../../store';
-// import Grid from '@material-ui/core/Grid'
-// import React from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-// import Typography from '@material-ui/core/Typography';
-// import Paper from '@material-ui/core/Paper';
-// import Divider from '@material-ui/core/Divider';
-// import Grid from '@material-ui/core/Grid';
-// import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 
 export interface myobj {
   [key: string]: any;
@@ -61,9 +46,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export interface myArray {
   myArray: any[];
 }
-const client = createClient({
-  url: 'https://react.eogresources.com/graphql',
-});
+
 const query = `
 query($metricName: String!) {
     getLastKnownMeasurement(metricName: $metricName) {
@@ -89,12 +72,13 @@ const IdivItem: React.FC<any> = (selectedValue: myobj) => {
   let [metricValue, onmetricSelected] = useState<myobj>({});
 
   const dispatch = useDispatch();
-
   const [result] = useQuery({
     query,
     variables: {
       metricName: selectedValue.selectedValue,
     },
+    pollInterval: 1300,
+    requestPolicy: 'network-only',
   });
   const { fetching, data, error } = result;
   useEffect(() => {

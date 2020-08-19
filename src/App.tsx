@@ -9,6 +9,9 @@ import Header from './components/Header';
 import Wrapper from './components/Wrapper';
 import NowWhat from './components/NowWhat';
 
+let timee: string = new Date().getTime().toString();
+localStorage.setItem('date', timee);
+
 const store = createStore();
 const theme = createMuiTheme({
   palette: {
