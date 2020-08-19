@@ -4,6 +4,7 @@ import { actions } from './reducer';
 import { Provider, createClient, useQuery } from 'urql';
 import { IState } from '../../store';
 import Select from 'react-select';
+import { DisplayChart } from '../DisplayChart/DisplayChart';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
@@ -142,6 +143,14 @@ const Listt: React.FC = () => {
             </Paper>
           </Grid>
         </Grid>
+
+        {selectedValue.length > 0 ? (
+          <Grid item xs={8}>
+            <Paper className={classes.paper}>
+              <DisplayChart selectedValue={selectedValue}></DisplayChart>
+            </Paper>
+          </Grid>
+        ) : null}
       </Container>
     </div>
   );
