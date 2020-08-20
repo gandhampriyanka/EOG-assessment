@@ -144,7 +144,9 @@ const List: React.FC = () => {
   };
 
   type OptionType = { label: string; value: number };
-  let listofEquipments = <Select options={optionsList} isMulti onChange={selectt} />;
+  let listofEquipments = (
+    <Select placeholder="Please Select Equipment Type" autoFocus options={optionsList} isMulti onChange={selectt} />
+  );
 
   const [result] = useQuery({
     query,
